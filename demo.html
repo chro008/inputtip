@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/tipinput.js"></script>
+		<link rel="StyleSheet" href="css/tipinput.css" type="text/css">
+	</head>
+	<body>
+		<div class="container">
+			<h1>提示信息输入框插件</h1>
+			<input type="button" value="获取值" id="save" style="margin:20px 0;">
+			<div id="main">
+
+			</div>
+			
+		</div>
+	</body>
+	<script>
+		var database = ["提示信息1","姓名abc","年龄12","爱好足球","性格活泼","住址","子非鱼创长度测试231232"];
+		var tip = $("#main").initTipInput({
+			database:database,
+			maxItem:3
+		});
+		
+		$("#save").click(function(){
+			var items = tip.getItem() || [];
+			if(items.length > 0) {
+				alert(items.join(","));
+			}
+		});
+	</script>
+</html>
