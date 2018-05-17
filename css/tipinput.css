@@ -3,18 +3,18 @@
 }
 
 
-.tip-wrap-container {
+.sys-tip-wrap-container {
 	position:fixed;
 }
 
-.tip-input {
+.sys-tip-input {
 	height:28px;
 	width:180px;
 	border:1px solid #ccc;
 	border-radius:3px;
 }
 
-.tip-item {
+.sys-tip-item {
 	height:20px;
 	line-height:20px;
 	background-color:#00BFFF;
@@ -27,7 +27,7 @@
 	font-size:13px;				
 }
 
-.tip-item-val {
+.sys-tip-item-val {
 	max-width:50px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -37,16 +37,16 @@
 	float:left;
 }
 
-.tip-item-del {
+.sys-tip-item-del {
 	float:left;
 	margin:10px 0 0 2px;
 	cursor:pointer;
 	display: inline-block; width: 10px;height:2px; background: white;line-height: 0;font-size:0;vertical-align: middle;-webkit-transform: rotate(45deg);
 }
 
-.tip-item-del:after{content:'/';display:block;width: 10px;height:2px; background: white;-webkit-transform: rotate(-90deg);}
+.sys-tip-item-del:after{content:'/';display:block;width: 10px;height:2px; background: white;-webkit-transform: rotate(-90deg);}
 
-.tip-main-input {
+.sys-tip-main-input {
 	border:0;
 	outline:none;
 	height:28px;
@@ -56,7 +56,7 @@
 }
 
 
-.tip-container {
+.sys-tip-container {
 	display:none;
 	position:absolute;
 	top:30px;
@@ -69,13 +69,13 @@
 }
 
 
-.tip-container .message {
+.sys-tip-container .message {
 	height:60px;
 	line-height:60px;
 	text-align:center;
 }
 
-.tip-container .choose-pannel {
+.sys-tip-container .choose-pannel {
 	padding: 0;
 	margin: 0;
 	width:100%;
@@ -84,14 +84,14 @@
 	overflow-y:auto;
 }
 
-.tip-container .choose-item {
+.sys-tip-container .choose-item {
 	display: inline-block;
 	width: 100%;
 	text-indent:10px;
 	cursor:pointer;
 }
 
-.tip-container .choose-item:hover {
+.sys-tip-container .choose-item:hover {
 	background-color: #6488c2;
 	color: white;
 }
