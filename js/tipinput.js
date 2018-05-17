@@ -51,13 +51,14 @@
                     inputVal = inputVal.replace(/(^\s*)|(\s*$)/, '');
                     if (e.keyCode === 27 || e.keyCode === 13 || e.keyCode === 8) {
                         //esc  || enter || backspace
-                        if (e.keyCode === 8 && thisobj.inputObj.find(".sys-tip-main-input").val().length === 0) {
-                            if(shouldBeRemove) {
-                                thisobj.inputObj.find(".sys-tip-item:last").find(".sys-tip-item-del").trigger("click");
-                                return;
-                            } else {
+                        if (e.keyCode === 8) {
+                            if(thisobj.inputObj.find(".sys-tip-main-input").val().length === 0) {
+                                if (shouldBeRemove) {
+                                    thisobj.inputObj.find(".sys-tip-item:last").find(".sys-tip-item-del").trigger("click");
+                                }
                                 shouldBeRemove = !shouldBeRemove;
                             }
+                            return;
                         }
                         if (e.keyCode === 13) {
                             var isGoingToChooseSomeItem = thisobj.tipContainer.find(".choose-pannel").is(":visible") && thisobj.tipContainer.find(".choose-item").length > 0;
@@ -132,8 +133,6 @@
                 var item = $("<div class='sys-tip-item' data-value='" + val + "' title='" + val + "'><div class='sys-tip-item-val'>" + val + "</div><div class='sys-tip-item-del'></div></div>");
                 thisobj.inputObj.find(".sys-tip-item-container").append(item);
                 thisobj.items.push(val);
-                console.log("add an item:", val);
-
                 if (thisobj.items.length >= thisobj.options.maxItem) {
                     thisobj.stopAdd();
                 }
@@ -179,13 +178,12 @@
 
             if (chooseItemsHtml.length > 0) {
                 this.tipContainer.find(".message").hide();
-
                 this.tipContainer.find(".choose-pannel").html(chooseItemsHtml);
+                this.tipContainer.find(".choose-pannel").find(".choose-item").eq(0).addClass("hover");
                 this.tipContainer.find(".choose-pannel").show();
 
             } else {
                 this.tipContainer.find(".choose-pannel").hide();
-
                 this.tipContainer.find(".message").html("<span>未找到匹配项</span>");
                 this.tipContainer.find(".message").show();
             }
@@ -207,6 +205,10 @@
             this.inputObj.find(".sys-tip-item").remove();
             this.inputObj.find(".sys-tip-main-input").val("");
             this.freshShow();
+        },
+
+        freshDataBase: function (database) {
+            this.options.database = database || [];
         },
 
         freshShow: function () {
