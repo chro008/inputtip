@@ -68,7 +68,7 @@
             thisobj.blurTimer = null;
             thisobj.inputObj.on("blur", ".tip-main-input", function(){
                 if(thisobj._switch === "on") {
-                    var inputVal = $(this).html();
+                    var inputVal = $(this).val();
                     thisobj.blurTimer = setTimeout(function(){
                         inputVal = inputVal.replace(/(^\s*)|(\s*$)/, '');
                         thisobj.addItem(inputVal);
