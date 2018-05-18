@@ -24,7 +24,7 @@
 		});
 		
 		$("#save").click(function(){
-			var items = tip.getItem() || [];
+			var items = tip.getItems() || [];
 			if(items.length > 0) {
 				alert(items.join(","));
 			}
