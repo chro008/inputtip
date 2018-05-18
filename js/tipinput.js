@@ -20,6 +20,7 @@
         defaultOptions: {
             maxItem: 3,  //最多可以填入几个内容
             database: [],  //提示信息数据库
+            isValidCallback: null,   //是否合法的回调，设置一个callback 可以限定每个item
             allowUserDefined: true   //是否允许自定义输入（不依赖database）
         },
 
@@ -44,7 +45,7 @@
         addEventListener: function () {
             var thisobj = this;
 
-            var shouldBeRemove = false; //按两次才会删除 防止误删
+            thisobj.shouldBeRemove = false; //按两次才会删除 防止误删
             thisobj.inputObj.on("keyup", ".sys-tip-main-input", function (e) {
                 if (thisobj._switch === "on") {
                     var inputVal = $(this).val();
@@ -52,12 +53,15 @@
                     if (e.keyCode === 27 || e.keyCode === 13 || e.keyCode === 8) {
                         //esc  || enter || backspace
                         if (e.keyCode === 8) {
-                            if(thisobj.inputObj.find(".sys-tip-main-input").val().length === 0) {
-                                if (shouldBeRemove) {
+                            if (thisobj.inputObj.find(".sys-tip-main-input").val().length === 0) {
+                                if (thisobj.shouldBeRemove) {
                                     thisobj.inputObj.find(".sys-tip-item:last").find(".sys-tip-item-del").trigger("click");
                                 }
-                                shouldBeRemove = !shouldBeRemove;
+                                thisobj.shouldBeRemove = !thisobj.shouldBeRemove;
+                            } else {
+                                thisobj.shouldBeRemove = false;
                             }
+                            thisobj.showTipContainer(inputVal);
                             return;
                         }
                         if (e.keyCode === 13) {
@@ -79,6 +83,7 @@
                         }
                         thisobj.addItem(inputVal);
                     } else {
+                        thisobj.shouldBeRemove = false;
                         thisobj.showTipContainer(inputVal);
                     }
                 }
@@ -102,11 +107,11 @@
                 }
             });
 
-            thisobj.inputObj.on("mouseenter", ".sys-tip-container", function () {
+            thisobj.tipContainer.on("mouseenter", function () {
                 thisobj.blurLock = true;
             });
 
-            thisobj.inputObj.on("mouseleave", ".sys-tip-container", function () {
+            thisobj.tipContainer.on("mouseleave", function () {
                 thisobj.blurLock = false;
             });
 
@@ -128,7 +133,22 @@
         addItem: function (val) {
             var thisobj = this;
             thisobj.hideTipContainer();
-            if (val && val.length > 0) {
+            if(!thisobj.options.allowUserDefined) {
+                var containedByDatabase = false;
+                for(var i=0,l=thisobj.options.database.length;i<l;i++){
+                    if(val === thisobj.options.database[i]) {
+                        containedByDatabase = true;
+                        break;
+                    }
+                }
+                if(!containedByDatabase){
+                    //没有输入要求输入的值
+                    thisobj.inputObj.find(".sys-tip-main-input").val("");
+                    return;
+                }
+            }
+            var isValid = (thisobj.options.isValidCallback ? thisobj.options.isValidCallback(val) : true);
+            if (val && val.length > 0 && isValid) {
                 thisobj.inputObj.find(".sys-tip-main-input").val("");
                 var item = $("<div class='sys-tip-item' data-value='" + val + "' title='" + val + "'><div class='sys-tip-item-val'>" + val + "</div><div class='sys-tip-item-del'></div></div>");
                 thisobj.inputObj.find(".sys-tip-item-container").append(item);
@@ -203,12 +223,21 @@
             this.items = [];
             this._switch = "on";
             this.inputObj.find(".sys-tip-item").remove();
-            this.inputObj.find(".sys-tip-main-input").val("");
+            this.inputObj.find(".sys-tip-main-input").val("").show();
             this.freshShow();
         },
 
-        freshDataBase: function (database) {
-            this.options.database = database || [];
+        resetOptions: function (options) {
+            this.options = $.extend({}, this.defaultOptions, options);
+        },
+
+        resetOption:function(key, val){
+            for(var k in this.options) {
+                if(k === key) {
+                    this.options[k] = val;
+                }
+            }
+            return this;
         },
 
         freshShow: function () {
@@ -220,7 +249,11 @@
             var inputWidth = Math.max(80, (175 - (this.inputObj.find(".sys-tip-item").length * 50)));
             this.inputObj.find(".sys-tip-main-input").css("width", inputWidth + "px");
 
-            width += this.inputObj.find(".sys-tip-main-input").outerWidth(true);
+            if(this.inputObj.find(".sys-tip-main-input").is(":visible")) {
+                width += this.inputObj.find(".sys-tip-main-input").outerWidth(true);
+            } else {
+                width += 6;//最有面留点空隙
+            }
             width = Math.max(width, 180);
             this.inputObj.css("width", width + "px");
         }
