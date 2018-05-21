@@ -210,7 +210,7 @@
             }
             for (var i = 0, l = database.length; i < l; i++) {
                 if (database[i].indexOf(val) >= 0) {
-                    chooseItemsHtml += "<li class='choose-item'>" + Util.escapeHtml(database[i]) + "</li>";
+                    chooseItemsHtml += "<li class='choose-item' data-index='" + i + "'>" + Util.escapeHtml(database[i]) + "</li>";
                 }
             }
 
@@ -269,9 +269,8 @@
 
             if(this.inputObj.find(".sys-tip-main-input").is(":visible")) {
                 width += this.inputObj.find(".sys-tip-main-input").outerWidth(true);
-            } else {
-                width += 6;//最有面留点空隙
-            }
+            } 
+			width += 6;//最右面留点空隙
             width = Math.max(width, 182);
             this.inputObj.css("width", width + "px");
         }
