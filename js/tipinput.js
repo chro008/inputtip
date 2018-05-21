@@ -139,8 +139,8 @@
 
             thisobj.tipContainer.on("click", ".choose-item", function () {
                 if (thisobj._switch === "on") {
-                    var inputVal = $(this).html();
-                    inputVal = inputVal.replace(/(^\s*)|(\s*$)/, '');
+                    var index = $(this).data("index");
+                    var inputVal = thisobj.options.database[index];
                     thisobj.addItem(inputVal);
                     thisobj.blurLock = false;
                 }
@@ -210,7 +210,7 @@
             }
             for (var i = 0, l = database.length; i < l; i++) {
                 if (database[i].indexOf(val) >= 0) {
-                    chooseItemsHtml += "<li class='choose-item'>" + database[i] + "</li>";
+                    chooseItemsHtml += "<li class='choose-item'>" + Util.escapeHtml(database[i]) + "</li>";
                 }
             }
 
@@ -272,7 +272,7 @@
             } else {
                 width += 6;//最有面留点空隙
             }
-            width = Math.max(width, 180);
+            width = Math.max(width, 182);
             this.inputObj.css("width", width + "px");
         }
     };
