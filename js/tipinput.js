@@ -4,6 +4,23 @@
  */
  (function($){
     'use strict';
+  
+    var Util = {};
+    Util.escapeHtml = function(text){
+    	 if(text){
+        return text.replace(/[<>"'&/]/g, function(match){
+          switch(match){
+            case "<": return "&lt;";
+            case ">":return "&gt;";
+            case "&":return "&amp;";
+            case "'":return "&#39;";
+            case "\"":return "&quot;";
+            case "/":return "&#x2F;";
+          }
+        });
+		    }
+      return text;
+    };
 
     $.fn.initTipInput = function (options) {
         return new TipInput(this, options);
@@ -150,7 +167,8 @@
             var isValid = (thisobj.options.isValidCallback ? thisobj.options.isValidCallback(val) : true);
             if (val && val.length > 0 && isValid) {
                 thisobj.inputObj.find(".sys-tip-main-input").val("");
-                var item = $("<div class='sys-tip-item' data-value='" + val + "' title='" + val + "'><div class='sys-tip-item-val'>" + val + "</div><div class='sys-tip-item-del'></div></div>");
+                var escapeVal = Util.escapeHtml(val);
+                var item = $("<div class='sys-tip-item' data-value='" + escapeVal + "' title='" + escapeVal + "'><div class='sys-tip-item-val'>" + escapeVal + "</div><div class='sys-tip-item-del'></div></div>");
                 thisobj.inputObj.find(".sys-tip-item-container").append(item);
                 thisobj.items.push(val);
                 if (thisobj.items.length >= thisobj.options.maxItem) {
