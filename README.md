@@ -1,4 +1,4 @@
-# tipInput
+# inputtip
 
 ![image](https://github.com/chro008/tipInput/raw/master/demo.gif)
 
