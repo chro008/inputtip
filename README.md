@@ -4,4 +4,4 @@
 
 依赖jq
 详情可见demo 
-https://github.easytake.top/tip_input/demo.html
+https://github.easytake.top/inputtip/demo.html
