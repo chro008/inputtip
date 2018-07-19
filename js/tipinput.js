@@ -67,8 +67,8 @@
                 if (thisobj._switch === "on") {
                     var inputVal = $(this).val();
                     inputVal = inputVal.replace(/(^\s*)|(\s*$)/, '');
-                    if (e.keyCode === 27 || e.keyCode === 13 || e.keyCode === 8) {
-                        //esc  || enter || backspace
+                    if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 13 || e.keyCode === 8) {
+                        //up || down  || enter || backspace
                         if (e.keyCode === 8) {
                             if (thisobj.inputObj.find(".sys-tip-main-input").val().length === 0) {
                                 if (thisobj.shouldBeRemove) {
@@ -79,26 +79,39 @@
                                 thisobj.shouldBeRemove = false;
                             }
                             thisobj.showTipContainer(inputVal);
-                            return;
-                        }
-                        if (e.keyCode === 13) {
-                            var isGoingToChooseSomeItem = thisobj.tipContainer.find(".choose-pannel").is(":visible") && thisobj.tipContainer.find(".choose-item").length > 0;
-                            var index = -1;
-                            if (isGoingToChooseSomeItem) {
-                                thisobj.tipContainer.find(".choose-item").each(function (i, obj) {
-                                    if ($(obj).html().indexOf(inputVal) >= 0) {
-                                        index = i;
-                                        return false;
+                        } else if(e.keyCode === 38 || e.keyCode === 40) {
+                            if(thisobj.tipContainer.find(".choose-pannel").is(":visible") && thisobj.tipContainer.find(".choose-item").length > 0) {
+                                var itemLength = thisobj.tipContainer.find(".choose-item").length;
+                                var index = thisobj.tipContainer.find(".choose-pannel .hover").index();
+                                if(e.keyCode === 38) {
+                                    if(index === 0) {
+                                        index = itemLength;
                                     }
-                                });
-                                if (index >= 0) {
-                                    thisobj.tipContainer.find(".choose-item").eq(index).trigger("click");
-                                    return
+                                    index --;
+                                } else {
+                                    index ++;
+                                }
+                                thisobj.tipContainer.find(".choose-item").removeClass("hover");
+                                index = index % itemLength;
+                                if(index >= 0) {
+                                    thisobj.tipContainer.find(".choose-item").eq(index).addClass("hover");
+                                    thisobj.tipContainer.find(".choose-pannel").scrollTop(0);
+                                    var top = thisobj.tipContainer.find(".choose-item.hover").offset().top - thisobj.tipContainer.offset().top;
+                                   if(top) {
+                                       thisobj.tipContainer.find(".choose-pannel").scrollTop(top - 30);
+                                   }
                                 }
                             }
-
+                        } else {
+						   var isGoingToChooseSomeItem = thisobj.tipContainer.find(".choose-pannel").is(":visible")
+									&& thisobj.tipContainer.find(".choose-pannel .hover").length > 0 ;
+							if (isGoingToChooseSomeItem) {
+								var index = thisobj.tipContainer.find(".choose-pannel .hover").index();
+								thisobj.tipContainer.find(".choose-item").eq(index).trigger("click");
+							} else {
+								thisobj.addItem(inputVal);
+							}
                         }
-                        thisobj.addItem(inputVal);
                     } else {
                         thisobj.shouldBeRemove = false;
                         thisobj.showTipContainer(inputVal);
@@ -217,7 +230,6 @@
             if (chooseItemsHtml.length > 0) {
                 this.tipContainer.find(".message").hide();
                 this.tipContainer.find(".choose-pannel").html(chooseItemsHtml);
-                this.tipContainer.find(".choose-pannel").find(".choose-item").eq(0).addClass("hover");
                 this.tipContainer.find(".choose-pannel").show();
 
             } else {
